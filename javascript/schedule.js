@@ -36,13 +36,31 @@
           location: destination,
           firstTrain: firstTrain ,
           frequency: frequency ,
-          
+          dateAdded: firebase.database.ServerValue.TIMESTAMP
         })
-        
+
+
+        var momentFirstTrain = moment(firstTrain, "HH:mm") 
+        var momentFrequency = moment(frequency, "mm") 
+
+
+        console.log( 'moment first train', momentFirstTrain);
+        console.log( 'moment freq', momentFrequency);
+
+        var nextArrival = moment(momentFirstTrain + momentFrequency).format("HH:mm");
+        var minAway = moment()
+
+
+       
 
         // Appending results into table using JQuery
-        $("#add-row").prepend("<tr><td>" + name + "</td><td>" + destination + "</td><td>"+ frequency + "</td><td>")
+        $("#add-row").prepend("<tr><td>" + name + "</td><td>" + destination + "</td><td>"+ frequency + "</td><td>" + nextArrival + "</td>" )
 
     })
+    
+        
+    
+    
+    
 
 
