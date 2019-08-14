@@ -3,4 +3,16 @@
     border: 2px solid red ;
     border-radius: 10px ;
     font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif ;
+
+}
+.container {
+  margin-top: 20px ;
+  padding-bottom: 10px ;
+}
+#addTrain {
+    border-color: black ;
+    background-color: black ;
+}
+#addTrain:hover {
+    background-color: red ;
 }
