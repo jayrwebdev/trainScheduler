@@ -26,50 +26,48 @@ $("#addTrain").on("click", function () {
   destination = $("#place").val().trim();
   firstTrain = $("#firstTrain").val().trim();
   frequency = $("#frequency").val().trim();
+
   console.log(name)
   console.log(destination)
   console.log(firstTrain)
   console.log(frequency)
 
-  database.ref().set({
-    trainName: name,
-    location: destination,
-    firstTrain: firstTrain,
-    frequency: frequency,
-    dateAdded: firebase.database.ServerValue.TIMESTAMP
-  })
 
-
-  var momentFirstTrain = moment(firstTrain, "HH:mm z")
+  var momentFirstTrain = moment(firstTrain, "HH:mm ")
   var momentFrequency = moment(frequency, "mm")
   var now = moment();
-
-
-
-
-  var diffMin = now.diff(momentFirstTrain, "minutes ")
-  var remaining = diffMin % frequency;
-  var mintoCompleteFrequency = frequency - remaining;
-  var nextTrain = now.add(mintoCompleteFrequency, "minutes").format("HH:mm z");
 
   console.log('moment first train', momentFirstTrain);
   console.log('moment freq', momentFrequency);
   console.log("current time", now);
-  console.log("next train time", nextTrain);
-  console.log("remaining time", remaining);
   console.log("moment current time", now)
-  console.log("complate frequency",mintoCompleteFrequency)
 
+   var diffMin = now.diff(momentFirstTrain, "minutes ")
+   var remaining = diffMin % frequency;
+   var mintoCompleteFrequency = frequency - remaining;
+   var nextTrain = now.add(mintoCompleteFrequency, "minutes").format("HH:mm ");
 
+   console.log("next train time", nextTrain);
+   console.log("remaining time", remaining);
+   console.log("complate frequency", mintoCompleteFrequency)
 
-
-
-
-
-
-
-  // Appending results into table using JQuery
-  $("#add-row").prepend("<tr><td>" + name + "</td><td>" + destination + "</td><td>" + frequency + "</td><td>" + nextTrain + "</td><td>" + mintoCompleteFrequency + "</td></tr>");
+   database.ref().push({
+    trainName: name,
+    location: destination,
+    firstTrain: firstTrain,
+    frequency: frequency,
+    dateAdded: firebase.database.ServerValue.TIMESTAMP,
+    next: nextTrain,
+    remaining: mintoCompleteFrequency,
+  })
+  
+  
+  
+})
+database.ref().on("child_added", function (childSnapshot) {
+  
+  console.log( childSnapshot.val() );
+  $("#add-row").prepend("<tr><td>" + childSnapshot.val().trainName + "</td><td>" + childSnapshot.val().location + "</td><td>" + childSnapshot.val().frequency + "</td><td>" + childSnapshot.val().next + "</td><td>" + childSnapshot.val().remaining + "</td></tr>");
 
 })
 
